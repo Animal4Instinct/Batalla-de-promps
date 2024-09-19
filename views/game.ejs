@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game: <%= game._id %>
+  </title>
+  <link rel="stylesheet" href="/css/game.css">
+  <script src="/socket/gameSocket.js" defer></script>
+  <script defer src="/js/game.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    <div class="game-container">
+      <h1>Game ID: <%= game._id %>
+      </h1>
+
+      <% if (game.topic) { %>
+        <p>Topic: <%= game.topic.title %>
+        </p>
+        <% } else { %>
+          <p>No topic assigned</p>
+          <% } %>
+
+            <h3>Configuración del Juego:</h3>
+            <div id="timer" class="hidden">
+              Tiempo restante: <span id="time-remaining">
+                <%= timeRemaining %> segundos
+              </span>
+            </div>
+
+            <ul>
+              <li>Tiempo de juego: <%= game.gameTime %> minuto/s</li>
+              <li>Cantidad de imágenes: <%= game.imageCount %>
+              </li>
+              <li>Modo de votación: <%= game.votingMode==='public' ? 'Público' : 'Admin' %>
+              </li>
+            </ul>
+
+            <div class="player-container">
+              <div class="player-section">
+                <h2>Jugador 1: <%= player1NickName %>
+                </h2>
+                <input type="text" id="input-player1" placeholder="Enter your prompt">
+                <button id="generate-player1">Generar</button>
+                <div id="images-player1">
+                  <% game.images.forEach(function(image) { %>
+                    <% if (image.player==='player1' ) { %>
+                      <img src="<%= image.imageUrl %>" alt="Imagen generada por Jugador 1" width="300">
+                      <% } %>
+                        <% }) %>
+                </div>
+              </div>
+
+              <div class="player-section">
+                <h2>Jugador 2: <%= player2NickName %>
+                </h2>
+                <input type="text" id="input-player2" placeholder="Enter your prompt">
+                <button id="generate-player2">Generar</button>
+                <div id="images-player2">
+                  <% game.images.forEach(function(image) { %>
+                    <% if (image.player==='player2' ) { %>
+                      <img src="<%= image.imageUrl %>" alt="Imagen generada por Jugador 2" width="300">
+                      <% } %>
+                        <% }) %>
+                </div>
+              </div>
+            </div>
+
+            <div id="voting-section" class="voting-section <%= game.votingMode === 'public' ? '' : 'hidden' %>">
+              <h3>Vote for the Winner</h3>
+              <button id="vote-player1">Vote Player 1</button>
+              <button id="vote-player2">Vote Player 2</button>
+              <p>Current votes: Player 1 - <span id="player1-votes">
+                  <%= game.player1Votes || 0 %>
+                </span>, Player 2 - <span id="player2-votes">
+                  <%= game.player2Votes || 0 %>
+                </span></p>
+            </div>
+
+            <% if (user.isAdmin) { %>
+              <div id="select-winner-section" class="hidden">
+                <h3>Select Winner</h3>
+                <form action="/game/<%= game._id %>/select-winner" method="POST">
+                  <label for="winner">Select winner:</label>
+                  <select name="winner" id="winner">
+                    <option value="player1">
+                      <%= game.player1 %>
+                    </option>
+                    <option value="player2">
+                      <%= game.player2 %>
+                    </option>
+                  </select>
+                  <button type="submit">Select Winner</button>
+                </form>
+              </div>
+              <% } %>
+
+                <a href="/lobby" class="btn btn-primary">Volver al Lobby</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <img src="/images/logo.png" alt="Logo" class="footer-logo">
+      <p>&copy; <span id="year"></span> Batalla de Promps. Desarrollado por <strong>Nicolás Rodríguez</strong>.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Actualiza el año en el footer automáticamente
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>

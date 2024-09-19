@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lista de temas disponibles para el juego Batalla de Promps. Añade y visualiza temas para tus partidas.">
+  <title>Lista de Temas - Batalla de Promps</title>
+  <link rel="stylesheet" href="/css/topics.css">
+  <link rel="icon" href="/public/images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Lista de Temas</h1>
+    </header>
+
+    <main>
+      <!-- Tabla de temas -->
+      <table class="topic-list">
+        <thead>
+          <tr>
+            <th>Tema</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% topics.forEach(topic => { %>
+            <tr>
+              <td><%= topic.title %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <!-- Formulario para añadir un nuevo tema -->
+      <section class="add-topic-form">
+        <h2>Añadir Nuevo Tema</h2>
+        <form action="/topics/add" method="POST">
+          <input type="text" name="title" placeholder="Introduce un tema" required aria-label="Introducir tema">
+          <button type="submit">Añadir Tema</button>
+        </form>
+      </section>
+
+      <!-- Botón para volver al lobby -->
+      <a href="/lobby" class="back-button">Volver al Lobby</a>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <img src="images/logo.png" alt="Logo" class="footer-logo" loading="lazy">
+      <p>&copy; <span id="year"></span> Batalla de Promps. Desarrollado por <strong>Nicolás Rodríguez</strong>.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Actualiza el año en el footer automáticamente
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>
