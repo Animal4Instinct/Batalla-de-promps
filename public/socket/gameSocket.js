@@ -1,35 +1,43 @@
-const startTimer = require('../utils/timer');
+const startTimer = require('../utils/timer'); // Cambiar a require para Node.js
 
 const gameSocket = (io) => {
   io.on('connection', (socket) => {
     console.log('A user connected');
 
-    // Manejo del evento de unirse a un juego
     socket.on('joinGame', (gameId) => {
       socket.join(gameId);
       console.log(`Client joined game ${gameId}`);
     });
 
-    // Manejo del evento de iniciar el juego
     socket.on('startGame', ({ gameId, gameTime }) => {
       startTimer(io, gameId, gameTime);
+      console.log(`El juego ${gameId} ha sido iniciado`);
     });
 
-    // Manejo del evento de iniciar la votación
     socket.on('startVoting', (gameId) => {
       io.to(gameId).emit('votingStarted');
+      console.log(`Comenzó la votación del juego ${gameId}`);
     });
 
-    // Manejo del evento de seleccionar al ganador
     socket.on('selectWinner', ({ gameId, winner }) => {
       io.to(gameId).emit('winnerSelected', { winner });
+      console.log(`El ganador fue ${winner}`);
     });
 
-    // Manejo de desconexiones de usuario
+    socket.on('endGame', (gameId) => {
+      io.to(gameId).emit('gameEnded');
+      console.log(`El juego ${gameId} ha finalizado.`);
+    });
+
+    socket.on('endVoting', (gameId) => {
+      io.to(gameId).emit('votingEnded');
+      console.log(`La votación del juego ${gameId} ha finalizado.`);
+    });
+
     socket.on('disconnect', () => {
       console.log('User disconnected');
     });
   });
 };
 
-module.exports = gameSocket;
+module.exports = gameSocket; // Cambiar a module.exports para Node.js

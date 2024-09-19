@@ -4,7 +4,10 @@ const Game = require('../models/Game');
 exports.getGame = async (req, res) => {
   try {
     const gameId = req.params.id;
-    const game = await Game.findById(gameId).populate('topic').populate('player1').populate('player2'); // Asegúrate de poblar los jugadores
+    const game = await Game.findById(gameId)
+      .populate('topic')
+      .populate('player1')
+      .populate('player2'); // Asegúrate de poblar los jugadores
 
     if (!game) {
       return res.status(404).send('Juego no encontrado');
@@ -32,7 +35,6 @@ exports.getGame = async (req, res) => {
       player1NickName,      
       player2NickName
     });
-    console.log(player1NickName)
   } catch (err) {
     console.error('Error en el servidor:', err.message);
     res.status(500).send('Error en el servidor');
@@ -52,5 +54,5 @@ exports.emitTimeRemaining = (game, io) => {
     throw new Error('No se ha proporcionado el objeto io para emitir el tiempo restante');
   }
 
-  io.to(game._id).emit('timeUpdate', { gameId: game._id, timeLeft });
+  io.to(game._id).emit('timerUpdate', { gameId: game._id, timeLeft });
 };

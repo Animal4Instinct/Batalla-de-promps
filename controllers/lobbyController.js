@@ -1,6 +1,7 @@
 const Game = require('../models/Game');
 const Topic = require('../models/Topic');
 const User = require('../models/User');
+const startTimer = require('../public/utils/timer');
 
 // Mostrar el lobby
 exports.showLobby = async (req, res) => {
@@ -141,6 +142,11 @@ exports.startGame = async (req, res) => {
       gameId: game._id,
       startTime: game.startTime,
       gameTime: game.gameTime
+    });
+
+    // Iniciar el temporizador
+    startTimer(req.app.get('io'), game._id.toString(), game.gameTime, (id) => {
+      req.app.get('io').emit('gameEnded', { gameId: id });
     });
 
     res.redirect(`/game/${game._id}`);

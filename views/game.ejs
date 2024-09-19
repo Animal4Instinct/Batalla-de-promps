@@ -7,8 +7,8 @@
   <title>Game: <%= game._id %>
   </title>
   <link rel="stylesheet" href="/css/game.css">
-  <script src="/socket/gameSocket.js" defer></script>
-  <script defer src="/js/game.js"></script>
+  <script type="module" src="/js/game.js" defer></script>
+  <script type="module" src="/socket/gameSocket.js" defer></script>
 </head>
 
 <body>
@@ -25,7 +25,7 @@
           <% } %>
 
             <h3>Configuración del Juego:</h3>
-            <div id="timer" class="hidden">
+            <div id="timer" class="<%= game.status === 'in-progress' ? '' : 'hidden' %>">
               Tiempo restante: <span id="time-remaining">
                 <%= timeRemaining %> segundos
               </span>

@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const http = require('http');
 const socketIo = require('socket.io');
 const connectDB = require('./config/db');
-const gameSocket = require('./socket/gameSocket');
+const gameSocket = require('./public/socket/gameSocket');
 const path = require('path');
 const authMiddleware = require('./middleware/authMiddleware'); // Asegúrate de que este archivo existe
 
