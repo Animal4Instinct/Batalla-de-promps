@@ -31,9 +31,9 @@
         <% games.forEach(game => { %>
           <tr>
             <td><%= game._id %></td>
-            <td><%= game.player1 %></td>
-            <td><%= game.player2 || 'Esperando' %></td>
-            <td><%= game.topic.title %></td>
+            <td><%= game.player1 ? game.player1.nickName : 'Sin asignar' %></td>
+            <td><%= game.player2 ? game.player2.nickName : 'Esperando' %></td>
+            <td><%= game.topic ? game.topic.title : 'Sin tema' %></td>
             <td><%= game.status %></td>
             <td>
               <% if (user.isAdmin) { %>

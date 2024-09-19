@@ -6,7 +6,10 @@ const User = require('../models/User');
 exports.showLobby = async (req, res) => {
   try {
     const [games, topics] = await Promise.all([
-      Game.find({ status: { $ne: 'completed' } }).populate('topic'),
+      Game.find({ status: { $ne: 'completed' } })
+        .populate('topic')
+        .populate('player1') // Poblar jugador 1
+        .populate('player2'), // Poblar jugador 2
       Topic.find()
     ]);
 
@@ -17,7 +20,7 @@ exports.showLobby = async (req, res) => {
 
     res.render('lobby', { user: req.user, games, topics });
   } catch (err) {
-    console.error(`Error in showLobby: ${err.message}`);
+    console.error(`Error en showLobby: ${err.message}`);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 };
